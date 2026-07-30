@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Yeading Colleague Deals — Tesco Mobile</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #F3F6FB; --panel: #FFFFFF; --panel-2: #EAF1FC; --line: #DCE6F5;
+    --blue: #0B5FFF; --blue-soft: #E4EDFF; --red: #E23759; --green: #1C9A54;
+    --text: #101826; --muted: #66748C;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; overflow-x: hidden; min-height: 100vh; }
+
+  .grid-bg { position: fixed; inset: 0; z-index: 0; background-image: linear-gradient(rgba(11,95,255,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(11,95,255,0.05) 1px, transparent 1px); background-size: 48px 48px; mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, black 30%, transparent 100%); animation: drift 30s linear infinite; }
+  @keyframes drift { from { background-position: 0 0; } to { background-position: 48px 96px; } }
+  .glow-orb { position: fixed; z-index: 0; border-radius: 50%; filter: blur(100px); opacity: 0.22; pointer-events: none; }
+  .glow-orb.one { width: 420px; height: 420px; background: var(--blue); top: -140px; left: -110px; animation: float1 14s ease-in-out infinite; }
+  .glow-orb.two { width: 380px; height: 380px; background: var(--red); bottom: -160px; right: -100px; animation: float2 16s ease-in-out infinite; }
+  @keyframes float1 { 0%,100% { transform: translate(0,0); } 50% { transform: translate(40px,60px); } }
+  @keyframes float2 { 0%,100% { transform: translate(0,0); } 50% { transform: translate(-50px,-40px); } }
+
+  .wrap { position: relative; z-index: 1; max-width: 1080px; margin: 0 auto; padding: 0 24px 100px; }
+  nav { display: flex; align-items: center; justify-content: space-between; padding: 28px 0; }
+  .brand { display: flex; align-items: center; gap: 10px; }
+  .brand-mark { width: 34px; height: 34px; border-radius: 9px; background: linear-gradient(135deg, var(--blue), #4C8DFF); display: flex; align-items: center; justify-content: center; font-weight: 700; color: #fff; font-size: 14px; }
+  .brand-name { font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 15px; }
+  .brand-name span { color: var(--muted); font-weight: 400; }
+  .nav-right { display: flex; align-items: center; gap: 10px; }
+  .live-pill { display: flex; align-items: center; gap: 7px; font-size: 12px; color: var(--blue); border: 1px solid #C7DBFF; padding: 6px 12px; border-radius: 999px; background: var(--blue-soft); }
+  .live-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--blue); animation: pulseDot 1.8s ease-in-out infinite; }
+  @keyframes pulseDot { 0%,100% { opacity: 1; box-shadow: 0 0 0 0 rgba(11,95,255,0.4); } 50% { opacity: 0.6; box-shadow: 0 0 0 6px rgba(11,95,255,0); } }
+  .mgr-btn { font-size: 12.5px; font-weight: 600; color: var(--muted); border: 1px solid var(--line); padding: 7px 14px; border-radius: 999px; background: #fff; cursor: pointer; }
+  .mgr-btn:hover { border-color: var(--blue); color: var(--blue); }
+
+  .hero { text-align: center; padding: 60px 0 40px; position: relative; }
+  .signal-stage { position: relative; width: 200px; height: 200px; margin: 0 auto 18px; display: flex; align-items: center; justify-content: center; }
+  .ring { position: absolute; border-radius: 50%; border: 1.5px solid var(--blue); opacity: 0; animation: ringOut 3.2s ease-out infinite; }
+  .ring.r1 { animation-delay: 0s; } .ring.r2 { animation-delay: 0.8s; } .ring.r3 { animation-delay: 1.6s; }
+  @keyframes ringOut { 0% { width: 56px; height: 56px; opacity: 0.7; border-width: 2px; } 100% { width: 200px; height: 200px; opacity: 0; border-width: 0.5px; } }
+  .tower { position: relative; z-index: 2; width: 60px; height: 60px; border-radius: 16px; background: linear-gradient(160deg, #fff, var(--panel-2)); border: 1px solid var(--line); display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 30px rgba(11,95,255,0.18); }
+  .tower svg { width: 28px; height: 28px; }
+  .eyebrow { font-size: 12.5px; letter-spacing: 2.5px; text-transform: uppercase; color: var(--blue); font-weight: 600; margin-bottom: 14px; }
+  h1 { font-size: clamp(32px, 5.5vw, 54px); line-height: 1.06; font-weight: 700; letter-spacing: -1px; }
+  h1 .accent { color: var(--blue); }
+  .sub { max-width: 540px; margin: 18px auto 0; color: var(--muted); font-size: 15.5px; line-height: 1.65; }
+  .contact-line { margin-top: 22px; display: inline-flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; color: var(--text); background: #fff; border: 1px solid var(--line); padding: 10px 18px; border-radius: 999px; }
+  .contact-line a { color: var(--blue); text-decoration: none; }
+  .bars { display: inline-flex; align-items: flex-end; gap: 3px; height: 14px; margin: 0 2px -2px; }
+  .bars i { width: 3px; background: var(--blue); display: block; border-radius: 1px; animation: barPulse 1.2s ease-in-out infinite; }
+  .bars i:nth-child(1){height:5px;animation-delay:0s;} .bars i:nth-child(2){height:9px;animation-delay:.15s;}
+  .bars i:nth-child(3){height:13px;animation-delay:.3s;} .bars i:nth-child(4){height:16px;animation-delay:.45s;}
+  @keyframes barPulse { 0%,100% { opacity: 0.35; } 50% { opacity: 1; } }
+
+  .section-head { display: flex; align-items: baseline; justify-content: space-between; margin: 60px 0 24px; }
+  .section-head h2 { font-family: 'Space Grotesk', sans-serif; font-size: 21px; font-weight: 600; }
+  .section-head .count { color: var(--muted); font-size: 13px; }
+  .refresh-btn { background: none; border: none; color: var(--blue); font-size: 12.5px; font-weight: 600; cursor: pointer; }
+
+  .deals { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 16px; }
+  .empty-state { text-align: center; padding: 50px 20px; color: var(--muted); border: 1px dashed var(--line); border-radius: 16px; font-size: 14px; grid-column: 1/-1; }
+
+  /* ---------- highlight-on-hover deal card ---------- */
+  .card {
+    position: relative; background: #fff; border: 1px solid var(--line); border-radius: 16px; padding: 22px;
+    opacity: 0; transform: translateY(16px); animation: cardIn 0.5s ease forwards; cursor: pointer;
+    transition: border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+    overflow: hidden;
+  }
+  .card::after {
+    content: ""; position: absolute; inset: 0; border-radius: 16px; opacity: 0; pointer-events: none;
+    background: radial-gradient(circle at var(--mx,50%) var(--my,50%), rgba(11,95,255,0.14), transparent 60%);
+    transition: opacity 0.3s ease;
+  }
+  .card:hover { border-color: #B9CFF7; transform: translateY(-5px); box-shadow: 0 14px 34px rgba(11,95,255,0.14); }
+  .card:hover::after { opacity: 1; }
+  @keyframes cardIn { to { opacity: 1; transform: translateY(0); } }
+  .card.new::before { content: "NEW"; position: absolute; top: -9px; right: 18px; background: var(--red); color: #fff; font-size: 10.5px; font-weight: 700; letter-spacing: 1px; padding: 4px 10px; border-radius: 999px; box-shadow: 0 4px 14px rgba(226,55,89,0.35); z-index: 2; }
+
+  .phone-name { font-family: 'Space Grotesk', sans-serif; font-size: 17px; font-weight: 600; margin-bottom: 14px; position: relative; z-index: 1; }
+  .price-row { display: flex; align-items: baseline; gap: 10px; margin-bottom: 4px; position: relative; z-index: 1; }
+  .price-normal { font-size: 14px; color: var(--muted); text-decoration: line-through; }
+  .price-colleague { font-family: 'Space Grotesk', sans-serif; font-size: 24px; font-weight: 700; color: var(--blue); }
+  .price-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 14px; position: relative; z-index: 1; }
+  .card-note { font-size: 13px; color: var(--muted); line-height: 1.5; margin-bottom: 14px; position: relative; z-index: 1; }
+  .card-foot { display: flex; justify-content: space-between; align-items: center; font-size: 11.5px; color: var(--muted); border-top: 1px solid var(--line); padding-top: 12px; position: relative; z-index: 1; }
+  .tap-hint { font-size: 11px; color: var(--blue); font-weight: 600; opacity: 0; transition: opacity 0.2s ease; }
+  .card:hover .tap-hint { opacity: 1; }
+
+  .footnote { margin-top: 60px; text-align: center; color: var(--muted); font-size: 12.5px; line-height: 1.7; }
+  .footnote b { color: var(--text); }
+  .footnote a { color: var(--blue); text-decoration: none; font-weight: 600; }
+
+  /* ---------- overlays ---------- */
+  .overlay { position: fixed; inset: 0; background: rgba(16,24,38,0.45); backdrop-filter: blur(3px); z-index: 50; display: flex; align-items: center; justify-content: center; padding: 20px; }
+  .modal { background: #fff; border-radius: 18px; padding: 28px; width: 420px; max-width: 100%; max-height: 86vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(16,24,38,0.25); }
+  .modal h3 { font-family: 'Space Grotesk', sans-serif; font-size: 18px; margin-bottom: 6px; }
+  .modal .modal-sub { font-size: 12.5px; color: var(--muted); margin-bottom: 18px; line-height: 1.5; }
+  .field { margin-bottom: 14px; }
+  .field label { display: block; font-size: 12px; font-weight: 600; color: var(--muted); margin-bottom: 6px; }
+  .field input, .field textarea { width: 100%; border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; font-size: 14px; font-family: inherit; color: var(--text); background: #FAFCFF; }
+  .field textarea { resize: vertical; min-height: 60px; }
+  .btn-row { display: flex; gap: 10px; margin-top: 18px; }
+  .btn { flex: 1; padding: 11px 16px; border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer; border: none; text-align: center; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
+  .btn-primary { background: var(--blue); color: #fff; }
+  .btn-whatsapp { background: #25D366; color: #fff; }
+  .btn-ghost { background: #fff; color: var(--text); border: 1px solid var(--line); }
+  .msg { font-size: 12.5px; margin-bottom: 12px; padding: 10px 12px; border-radius: 8px; }
+  .msg.err { background: #FDECEF; color: var(--red); }
+  .msg.ok { background: #E7F7EE; color: var(--green); }
+  .existing-list { margin-top: 20px; border-top: 1px solid var(--line); padding-top: 16px; }
+  .existing-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; font-size: 13px; border-bottom: 1px solid #F0F4FA; }
+  .existing-item .del { color: var(--red); font-size: 12px; cursor: pointer; font-weight: 600; }
+
+  /* detail popup specifics */
+  .detail-price { display: flex; align-items: baseline; gap: 12px; margin: 16px 0; }
+  .detail-price .n { font-size: 16px; color: var(--muted); text-decoration: line-through; }
+  .detail-price .c { font-family: 'Space Grotesk', sans-serif; font-size: 30px; font-weight: 700; color: var(--blue); }
+  .detail-row { display: flex; justify-content: space-between; font-size: 13px; padding: 8px 0; border-bottom: 1px solid #F0F4FA; color: var(--muted); }
+  .detail-row b { color: var(--text); font-weight: 600; }
+
+  @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+</style>
+</head>
+<body>
+
+<div class="grid-bg"></div>
+<div class="glow-orb one"></div>
+<div class="glow-orb two"></div>
+
+<div class="wrap">
+  <nav>
+    <div class="brand"><div class="brand-mark">TM</div><div class="brand-name">Yeading <span>· Colleague Deals</span></div></div>
+    <div class="nav-right">
+      <div class="live-pill"><span class="live-dot"></span>Live on GitHub</div>
+      <button class="mgr-btn" onclick="openManager()">Manager login</button>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="signal-stage">
+      <div class="ring r1"></div><div class="ring r2"></div><div class="ring r3"></div>
+      <div class="tower">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#0B5FFF" stroke-width="1.8" stroke-linecap="round">
+          <path d="M12 2 L12 22 M12 2 L8 6 M12 2 L16 6" /><path d="M5 10 a10 10 0 0 1 14 0" opacity="0.4" /><path d="M8 13 a5.5 5.5 0 0 1 8 0" opacity="0.75" />
+        </svg>
+      </div>
+    </div>
+    <div class="eyebrow">Tesco Mobile · Yeading team</div>
+    <h1>Reach further with<br><span class="accent">Yeading Tesco Mobile</span></h1>
+    <p class="sub">Colleague-only phone deals, posted the moment they're confirmed <span class="bars"><i></i><i></i><i></i><i></i></span> Tap any deal for full details.</p>
+    <div class="contact-line">For more offers, contact <a href="#" onclick="return openWhatsApp('07456610065')">07456 610065</a></div>
+  </section>
+
+  <div class="section-head">
+    <h2>Current phone deals</h2>
+    <div style="display:flex; align-items:center; gap:14px;"><span class="count" id="dealCount">— active</span><button class="refresh-btn" onclick="loadDeals()">↻ Refresh</button></div>
+  </div>
+
+  <div class="deals" id="dealsGrid"><div class="empty-state">Loading deals…</div></div>
+
+  <div class="footnote">Colleague board for the <b>Yeading</b> team · Data stored in this project's GitHub repo · More offers: <a href="#" onclick="return openWhatsApp('07456610065')">07456 610065</a></div>
+</div>
+
+<!-- ===== detail popup ===== -->
+<div class="overlay" id="detailOverlay" style="display:none;" onclick="if(event.target===this) closeOverlay('detailOverlay')">
+  <div class="modal" id="detailModal"></div>
+</div>
+
+<!-- ===== manager login ===== -->
+<div class="overlay" id="loginOverlay" style="display:none;">
+  <div class="modal">
+    <h3>Manager login</h3>
+    <div class="modal-sub">Sign in with your GitHub personal access token to add or remove deals. This is only used to save changes to this repo, and stays only in your own browser.</div>
+    <div id="loginMsg"></div>
+    <div class="field"><label>GitHub personal access token</label><input type="password" id="tokenInput" placeholder="ghp_..." /></div>
+    <div class="field" style="display:flex;align-items:center;gap:8px;"><input type="checkbox" id="rememberToken" style="width:auto;" /><label style="margin:0;font-weight:400;">Remember on this device</label></div>
+    <div class="btn-row"><button class="btn btn-ghost" onclick="closeOverlay('loginOverlay')">Cancel</button><button class="btn btn-primary" onclick="doLogin()">Continue</button></div>
+  </div>
+</div>
+
+<!-- ===== manager panel ===== -->
+<div class="overlay" id="managerOverlay" style="display:none;">
+  <div class="modal">
+    <h3>Add a deal</h3>
+    <div class="modal-sub">Saved as a real commit to the GitHub repo — everyone sees it within a minute.</div>
+    <div id="formMsg"></div>
+    <div class="field"><label>Phone name</label><input type="text" id="f_phone" placeholder="e.g. iPhone 16 128GB" /></div>
+    <div class="field"><label>Normal price (£)</label><input type="text" id="f_normal" placeholder="e.g. 799" /></div>
+    <div class="field"><label>Colleague price (£)</label><input type="text" id="f_colleague" placeholder="e.g. 599" /></div>
+    <div class="field"><label>Note (optional)</label><textarea id="f_note" placeholder="Contract length, data allowance, expiry, etc."></textarea></div>
+    <div class="btn-row"><button class="btn btn-ghost" onclick="closeOverlay('managerOverlay')">Close</button><button class="btn btn-primary" onclick="addDeal()">Save deal</button></div>
+    <div class="existing-list" id="existingList"></div>
+  </div>
+</div>
+
+<script>
+  // ============================================================
+  // ONE-TIME SETUP — see SETUP.md. Fill these in after you create
+  // the GitHub repo (these three values are NOT secret, just routing).
+  // ============================================================
+  const GH_OWNER  = "PASTE_YOUR_GITHUB_USERNAME";
+  const GH_REPO   = "PASTE_YOUR_REPO_NAME";
+  const GH_BRANCH = "main";
+  const DATA_PATH = "deals.json";
+
+  const RAW_URL = `https://raw.githubusercontent.com/${GH_OWNER}/${GH_REPO}/${GH_BRANCH}/${DATA_PATH}`;
+  const API_URL = `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${DATA_PATH}`;
+
+  let currentDeals = [];
+  let ghToken = localStorage.getItem("gh_token") || "";
+
+  function esc(s) { return (s || "").toString().replace(/[&<>"']/g, (c) => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c])); }
+
+  function toWhatsAppLink(rawNumber, text) {
+    let n = rawNumber.replace(/\D/g, "");
+    if (n.startsWith("0")) n = "44" + n.slice(1); // UK number -> international
+    return `https://wa.me/${n}${text ? "?text=" + encodeURIComponent(text) : ""}`;
+  }
+  function openWhatsApp(number, text) { window.open(toWhatsAppLink(number, text), "_blank"); return false; }
+
+  async function loadDeals() {
+    const grid = document.getElementById("dealsGrid");
+    try {
+      const res = await fetch(`${RAW_URL}?t=${Date.now()}`, { cache: "no-store" });
+      if (!res.ok) throw new Error("not found");
+      const data = await res.json();
+      currentDeals = data.deals || [];
+      renderDeals();
+    } catch (e) {
+      grid.innerHTML = `<div class="empty-state">Couldn't load deals right now. Contact <a href="#" onclick="return openWhatsApp('07456610065')">07456 610065</a> for the latest offers.</div>`;
+    }
+  }
+
+  function renderDeals() {
+    const grid = document.getElementById("dealsGrid");
+    document.getElementById("dealCount").textContent = `${currentDeals.length} active`;
+    if (currentDeals.length === 0) { grid.innerHTML = `<div class="empty-state">No deals posted yet — check back soon.</div>`; return; }
+    const sorted = [...currentDeals].sort((a,b) => (b.addedAt||0) - (a.addedAt||0));
+    grid.innerHTML = sorted.map((d, i) => {
+      const isNew = (Date.now() - (d.addedAt || 0)) < 1000 * 60 * 60 * 24 * 3;
+      return `
+        <div class="card ${isNew ? "new" : ""}" style="animation-delay:${i * 0.06}s" data-id="${esc(d.id)}"
+             onmousemove="cardGlow(event,this)" onclick="openDetail('${esc(d.id)}')">
+          <div class="phone-name">${esc(d.phone)}</div>
+          <div class="price-row"><span class="price-normal">£${esc(d.normalPrice)}</span><span class="price-colleague">£${esc(d.colleaguePrice)}</span></div>
+          <div class="price-label">Colleague price</div>
+          ${d.note ? `<div class="card-note">${esc(d.note)}</div>` : ""}
+          <div class="card-foot"><span>Posted ${new Date(d.addedAt || Date.now()).toLocaleDateString()}</span><span class="tap-hint">Tap for details →</span></div>
+        </div>`;
+    }).join("");
+  }
+
+  function cardGlow(e, el) {
+    const r = el.getBoundingClientRect();
+    el.style.setProperty("--mx", `${e.clientX - r.left}px`);
+    el.style.setProperty("--my", `${e.clientY - r.top}px`);
+  }
+
+  function openDetail(id) {
+    const d = currentDeals.find((x) => x.id === id);
+    if (!d) return;
+    const savingPct = d.normalPrice && d.colleaguePrice ? Math.round((1 - (d.colleaguePrice / d.normalPrice)) * 100) : null;
+    document.getElementById("detailModal").innerHTML = `
+      <h3>${esc(d.phone)}</h3>
+      <div class="modal-sub">Yeading colleague exclusive${savingPct ? ` · save ${savingPct}%` : ""}</div>
+      <div class="detail-price"><span class="n">£${esc(d.normalPrice)}</span><span class="c">£${esc(d.colleaguePrice)}</span></div>
+      <div class="detail-row"><span>Normal price</span><b>£${esc(d.normalPrice)}</b></div>
+      <div class="detail-row"><span>Colleague price</span><b>£${esc(d.colleaguePrice)}</b></div>
+      <div class="detail-row"><span>Posted</span><b>${new Date(d.addedAt || Date.now()).toLocaleDateString()}</b></div>
+      ${d.note ? `<div style="margin-top:14px;font-size:13.5px;color:var(--muted);line-height:1.6;">${esc(d.note)}</div>` : ""}
+      <div class="btn-row">
+        <button class="btn btn-ghost" onclick="closeOverlay('detailOverlay')">Close</button>
+        <a class="btn btn-whatsapp" href="${toWhatsAppLink('07456610065', `Hi, I'm interested in the ${d.phone} colleague deal (£${d.colleaguePrice}) on the Yeading board.`)}" target="_blank">Reach on WhatsApp</a>
+      </div>`;
+    document.getElementById("detailOverlay").style.display = "flex";
+  }
+
+  function openManager() {
+    if (ghToken) { showManagerPanel(); return; }
+    document.getElementById("loginOverlay").style.display = "flex";
+    document.getElementById("tokenInput").value = ""; document.getElementById("loginMsg").innerHTML = "";
+  }
+  function closeOverlay(id) { document.getElementById(id).style.display = "none"; }
+
+  async function doLogin() {
+    const token = document.getElementById("tokenInput").value.trim();
+    const msg = document.getElementById("loginMsg");
+    if (!token) { msg.innerHTML = `<div class="msg err">Paste your token first.</div>`; return; }
+    msg.innerHTML = `<div class="msg">Checking...</div>`;
+    try {
+      const res = await fetch(API_URL, { headers: { Authorization: `Bearer ${token}` } });
+      if (res.status === 401 || res.status === 403) { msg.innerHTML = `<div class="msg err">Token rejected — check it has 'repo' access.</div>`; return; }
+      ghToken = token;
+      if (document.getElementById("rememberToken").checked) localStorage.setItem("gh_token", token);
+      closeOverlay("loginOverlay");
+      showManagerPanel();
+    } catch (e) { msg.innerHTML = `<div class="msg err">Couldn't reach GitHub — check your connection.</div>`; }
+  }
+
+  function showManagerPanel() {
+    document.getElementById("managerOverlay").style.display = "flex";
+    renderExistingList();
+    document.getElementById("f_phone").value = ""; document.getElementById("f_normal").value = "";
+    document.getElementById("f_colleague").value = ""; document.getElementById("f_note").value = "";
+    document.getElementById("formMsg").innerHTML = "";
+  }
+
+  function renderExistingList() {
+    const list = document.getElementById("existingList");
+    if (currentDeals.length === 0) { list.innerHTML = ""; return; }
+    list.innerHTML = `<div style="font-size:12px;font-weight:600;color:var(--muted);margin-bottom:8px;">CURRENT DEALS</div>` +
+      currentDeals.map((d) => `<div class="existing-item"><span>${esc(d.phone)} — £${esc(d.colleaguePrice)}</span><span class="del" onclick="removeDeal('${esc(d.id)}')">Remove</span></div>`).join("");
+  }
+
+  // ---- GitHub Contents API: read sha, then commit updated deals.json ----
+  async function saveDealsToGitHub(deals) {
+    const getRes = await fetch(API_URL, { headers: { Authorization: `Bearer ${ghToken}` } });
+    if (!getRes.ok) throw new Error("Couldn't read current file");
+    const getData = await getRes.json();
+    const sha = getData.sha;
+    const newContent = btoa(unescape(encodeURIComponent(JSON.stringify({ deals }, null, 2))));
+    const putRes = await fetch(API_URL, {
+      method: "PUT",
+      headers: { Authorization: `Bearer ${ghToken}`, "Content-Type": "application/json" },
+      body: JSON.stringify({ message: `Update deals (${deals.length} active)`, content: newContent, sha, branch: GH_BRANCH }),
+    });
+    if (!putRes.ok) { const err = await putRes.json().catch(() => ({})); throw new Error(err.message || "GitHub rejected the commit"); }
+  }
+
+  async function addDeal() {
+    const phone = document.getElementById("f_phone").value.trim();
+    const normal = document.getElementById("f_normal").value.trim();
+    const colleague = document.getElementById("f_colleague").value.trim();
+    const note = document.getElementById("f_note").value.trim();
+    const msg = document.getElementById("formMsg");
+    if (!phone || !normal || !colleague) { msg.innerHTML = `<div class="msg err">Fill in phone name, normal price and colleague price.</div>`; return; }
+    const newDeal = { id: Date.now().toString(36) + Math.random().toString(36).slice(2,6), phone, normalPrice: normal, colleaguePrice: colleague, note, addedAt: Date.now() };
+    const updated = [newDeal, ...currentDeals];
+    msg.innerHTML = `<div class="msg">Saving to GitHub...</div>`;
+    try {
+      await saveDealsToGitHub(updated);
+      currentDeals = updated;
+      msg.innerHTML = `<div class="msg ok">Committed to GitHub — live on the board now.</div>`;
+      document.getElementById("f_phone").value = ""; document.getElementById("f_normal").value = ""; document.getElementById("f_colleague").value = ""; document.getElementById("f_note").value = "";
+      renderDeals(); renderExistingList();
+    } catch (e) { msg.innerHTML = `<div class="msg err">${esc(e.message)}</div>`; }
+  }
+
+  async function removeDeal(id) {
+    const updated = currentDeals.filter((d) => d.id !== id);
+    const msg = document.getElementById("formMsg");
+    msg.innerHTML = `<div class="msg">Removing...</div>`;
+    try {
+      await saveDealsToGitHub(updated);
+      currentDeals = updated;
+      msg.innerHTML = `<div class="msg ok">Removed and committed to GitHub.</div>`;
+      renderDeals(); renderExistingList();
+    } catch (e) { msg.innerHTML = `<div class="msg err">${esc(e.message)}</div>`; }
+  }
+
+  loadDeals();
+  setInterval(loadDeals, 60000);
+</script>
+
+</body>
+</html>
