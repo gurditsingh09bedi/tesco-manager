@@ -191,6 +191,7 @@
     <div class="modal-sub">Saved as a real commit to the GitHub repo — everyone sees it within a minute.</div>
     <div id="formMsg"></div>
     <div class="field"><label>Phone name</label><input type="text" id="f_phone" placeholder="e.g. iPhone 16 128GB" /></div>
+    <div class="field"><label>Phone photo (optional)</label><input type="file" id="f_photo" accept="image/*" onchange="previewPhoto(event)" /><img id="photoPreview" style="display:none;max-width:100%;border-radius:8px;margin-top:8px;" /></div>
     <div class="field"><label>Normal price (£)</label><input type="text" id="f_normal" placeholder="e.g. 799" /></div>
     <div class="field"><label>Colleague price (£)</label><input type="text" id="f_colleague" placeholder="e.g. 599" /></div>
     <div class="field"><label>Note (optional)</label><textarea id="f_note" placeholder="Contract length, data allowance, expiry, etc."></textarea></div>
@@ -204,8 +205,8 @@
   // ONE-TIME SETUP — see SETUP.md. Fill these in after you create
   // the GitHub repo (these three values are NOT secret, just routing).
   // ============================================================
-  const GH_OWNER  = "PASTE_YOUR_GITHUB_USERNAME";
-  const GH_REPO   = "PASTE_YOUR_REPO_NAME";
+  const GH_OWNER  = "gurditsingh09bedi";
+  const GH_REPO   = "tesco-manager";
   const GH_BRANCH = "main";
   const DATA_PATH = "deals.json";
 
@@ -214,6 +215,20 @@
 
   let currentDeals = [];
   let ghToken = localStorage.getItem("gh_token") || "";
+  let pendingPhoto = null;
+
+  function previewPhoto(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    if (file.size > 900 * 1024) { alert("Please pick a smaller image (under ~900KB) so the repo stays light."); e.target.value = ""; return; }
+    const reader = new FileReader();
+    reader.onload = () => {
+      pendingPhoto = reader.result; // data URL, stored directly in deals.json
+      const img = document.getElementById("photoPreview");
+      img.src = pendingPhoto; img.style.display = "block";
+    };
+    reader.readAsDataURL(file);
+  }
 
   function esc(s) { return (s || "").toString().replace(/[&<>"']/g, (c) => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c])); }
 
@@ -248,6 +263,7 @@
         <div class="card ${isNew ? "new" : ""}" style="animation-delay:${i * 0.06}s" data-id="${esc(d.id)}"
              onmousemove="cardGlow(event,this)" onclick="openDetail('${esc(d.id)}')">
           <div class="phone-name">${esc(d.phone)}</div>
+          ${d.photo ? `<img src="${d.photo}" alt="" style="width:100%;height:130px;object-fit:cover;border-radius:10px;margin-bottom:12px;position:relative;z-index:1;" />` : ""}
           <div class="price-row"><span class="price-normal">£${esc(d.normalPrice)}</span><span class="price-colleague">£${esc(d.colleaguePrice)}</span></div>
           <div class="price-label">Colleague price</div>
           ${d.note ? `<div class="card-note">${esc(d.note)}</div>` : ""}
@@ -269,6 +285,7 @@
     document.getElementById("detailModal").innerHTML = `
       <h3>${esc(d.phone)}</h3>
       <div class="modal-sub">Yeading colleague exclusive${savingPct ? ` · save ${savingPct}%` : ""}</div>
+      ${d.photo ? `<img src="${d.photo}" alt="" style="width:100%;max-height:220px;object-fit:cover;border-radius:10px;margin-top:6px;" />` : ""}
       <div class="detail-price"><span class="n">£${esc(d.normalPrice)}</span><span class="c">£${esc(d.colleaguePrice)}</span></div>
       <div class="detail-row"><span>Normal price</span><b>£${esc(d.normalPrice)}</b></div>
       <div class="detail-row"><span>Colleague price</span><b>£${esc(d.colleaguePrice)}</b></div>
@@ -340,7 +357,7 @@
     const note = document.getElementById("f_note").value.trim();
     const msg = document.getElementById("formMsg");
     if (!phone || !normal || !colleague) { msg.innerHTML = `<div class="msg err">Fill in phone name, normal price and colleague price.</div>`; return; }
-    const newDeal = { id: Date.now().toString(36) + Math.random().toString(36).slice(2,6), phone, normalPrice: normal, colleaguePrice: colleague, note, addedAt: Date.now() };
+    const newDeal = { id: Date.now().toString(36) + Math.random().toString(36).slice(2,6), phone, normalPrice: normal, colleaguePrice: colleague, note, photo: pendingPhoto, addedAt: Date.now() };
     const updated = [newDeal, ...currentDeals];
     msg.innerHTML = `<div class="msg">Saving to GitHub...</div>`;
     try {
@@ -348,6 +365,7 @@
       currentDeals = updated;
       msg.innerHTML = `<div class="msg ok">Committed to GitHub — live on the board now.</div>`;
       document.getElementById("f_phone").value = ""; document.getElementById("f_normal").value = ""; document.getElementById("f_colleague").value = ""; document.getElementById("f_note").value = "";
+      document.getElementById("f_photo").value = ""; document.getElementById("photoPreview").style.display = "none"; pendingPhoto = null;
       renderDeals(); renderExistingList();
     } catch (e) { msg.innerHTML = `<div class="msg err">${esc(e.message)}</div>`; }
   }
