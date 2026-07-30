@@ -1,6 +1,12 @@
 {
   "deals": [
-    { "id": "seed1", "phone": "iPhone 16 128GB", "normalPrice": "799", "colleaguePrice": "599", "note": "24-month contract, unlimited data", "addedAt": 1735000000000 },
-    { "id": "seed2", "phone": "Samsung Galaxy S25", "normalPrice": "749", "colleaguePrice": "549", "note": "24-month contract, 100GB data", "addedAt": 1735000000000 }
+    {
+      "id": "seed1",
+      "phone": "iPhone 16 128GB",
+      "normalPrice": "799",
+      "colleaguePrice": "599",
+      "note": "24-month contract, unlimited data",
+      "addedAt": 1735000000000
+    }
   ]
 }
