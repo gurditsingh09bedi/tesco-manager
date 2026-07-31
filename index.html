@@ -11,19 +11,23 @@
   :root {
     --bg: #F3F6FB; --panel: #FFFFFF; --panel-2: #EAF1FC; --line: #DCE6F5;
     --blue: #0B5FFF; --blue-soft: #E4EDFF; --red: #E23759; --green: #1C9A54;
-    --text: #101826; --muted: #66748C;
+    --violet: #8B5CF6; --text: #101826; --muted: #66748C;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
   html { scroll-behavior: smooth; }
   body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; overflow-x: hidden; min-height: 100vh; }
 
+  #particles { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+
   .grid-bg { position: fixed; inset: 0; z-index: 0; background-image: linear-gradient(rgba(11,95,255,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(11,95,255,0.05) 1px, transparent 1px); background-size: 48px 48px; mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, black 30%, transparent 100%); animation: drift 30s linear infinite; }
   @keyframes drift { from { background-position: 0 0; } to { background-position: 48px 96px; } }
-  .glow-orb { position: fixed; z-index: 0; border-radius: 50%; filter: blur(100px); opacity: 0.22; pointer-events: none; }
-  .glow-orb.one { width: 420px; height: 420px; background: var(--blue); top: -140px; left: -110px; animation: float1 14s ease-in-out infinite; }
-  .glow-orb.two { width: 380px; height: 380px; background: var(--red); bottom: -160px; right: -100px; animation: float2 16s ease-in-out infinite; }
+  .glow-orb { position: fixed; z-index: 0; border-radius: 50%; filter: blur(90px); opacity: 0.4; pointer-events: none; }
+  .glow-orb.one { width: 520px; height: 520px; background: var(--blue); top: -160px; left: -140px; animation: float1 14s ease-in-out infinite; }
+  .glow-orb.two { width: 460px; height: 460px; background: var(--red); bottom: -180px; right: -120px; animation: float2 16s ease-in-out infinite; }
+  .glow-orb.three { width: 400px; height: 400px; background: var(--violet); top: 30%; left: 50%; transform: translateX(-50%); animation: float3 18s ease-in-out infinite; opacity: 0.28; }
   @keyframes float1 { 0%,100% { transform: translate(0,0); } 50% { transform: translate(40px,60px); } }
   @keyframes float2 { 0%,100% { transform: translate(0,0); } 50% { transform: translate(-50px,-40px); } }
+  @keyframes float3 { 0%,100% { transform: translate(-50%,0); } 50% { transform: translate(-50%,-30px); } }
 
   .wrap { position: relative; z-index: 1; max-width: 1080px; margin: 0 auto; padding: 0 24px 100px; }
   nav { display: flex; align-items: center; justify-content: space-between; padding: 28px 0; }
@@ -39,15 +43,39 @@
   .mgr-btn:hover { border-color: var(--blue); color: var(--blue); }
 
   .hero { text-align: center; padding: 60px 0 40px; position: relative; }
-  .signal-stage { position: relative; width: 200px; height: 200px; margin: 0 auto 18px; display: flex; align-items: center; justify-content: center; }
-  .ring { position: absolute; border-radius: 50%; border: 1.5px solid var(--blue); opacity: 0; animation: ringOut 3.2s ease-out infinite; }
-  .ring.r1 { animation-delay: 0s; } .ring.r2 { animation-delay: 0.8s; } .ring.r3 { animation-delay: 1.6s; }
-  @keyframes ringOut { 0% { width: 56px; height: 56px; opacity: 0.7; border-width: 2px; } 100% { width: 200px; height: 200px; opacity: 0; border-width: 0.5px; } }
-  .tower { position: relative; z-index: 2; width: 60px; height: 60px; border-radius: 16px; background: linear-gradient(160deg, #fff, var(--panel-2)); border: 1px solid var(--line); display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 30px rgba(11,95,255,0.18); }
-  .tower svg { width: 28px; height: 28px; }
+  .phone3d-stage { position: relative; width: 220px; height: 240px; margin: 0 auto 10px; display: flex; align-items: center; justify-content: center; }
+  .phone3d {
+    position: relative; width: 110px; height: 210px; border-radius: 26px; z-index: 2;
+    background: linear-gradient(160deg, #1a1f36, #0d1024);
+    box-shadow: 0 30px 60px rgba(11,95,255,0.35), 0 0 0 3px rgba(255,255,255,0.6);
+    animation: phoneFloat 4s ease-in-out infinite;
+  }
+  @keyframes phoneFloat { 0%,100% { transform: translateY(0) rotate(-4deg); } 50% { transform: translateY(-14px) rotate(3deg); } }
+  .phone3d .screen {
+    position: absolute; inset: 8px; border-radius: 20px; overflow: hidden;
+    background: linear-gradient(145deg, var(--blue), var(--violet) 55%, #22D3EE);
+    background-size: 220% 220%; animation: screenShift 5s ease infinite;
+  }
+  @keyframes screenShift { 0% { background-position: 0% 0%; } 50% { background-position: 100% 100%; } 100% { background-position: 0% 0%; } }
+  .phone3d .notch { position: absolute; top: 14px; left: 50%; transform: translateX(-50%); width: 34px; height: 5px; border-radius: 4px; background: rgba(255,255,255,0.5); z-index: 3; }
+  .orbit-ring { position: absolute; border-radius: 50%; border: 1.5px dashed rgba(11,95,255,0.35); animation: orbitSpin 14s linear infinite; }
+  .orbit-ring.o1 { width: 200px; height: 200px; }
+  .orbit-ring.o2 { width: 240px; height: 240px; animation-duration: 20s; animation-direction: reverse; border-color: rgba(139,92,246,0.3); }
+  @keyframes orbitSpin { to { transform: rotate(360deg); } }
+  .float-emoji { position: absolute; font-size: 22px; animation: emojiOrbit 6s ease-in-out infinite; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.15)); }
+  .float-emoji.e1 { top: 10px; left: -6px; animation-delay: 0s; }
+  .float-emoji.e2 { bottom: 20px; right: -10px; animation-delay: 1.2s; }
+  .float-emoji.e3 { top: 50%; right: -20px; animation-delay: 2.4s; }
+  @keyframes emojiOrbit { 0%,100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-14px) scale(1.12); } }
   .eyebrow { font-size: 12.5px; letter-spacing: 2.5px; text-transform: uppercase; color: var(--blue); font-weight: 600; margin-bottom: 14px; }
   h1 { font-size: clamp(32px, 5.5vw, 54px); line-height: 1.06; font-weight: 700; letter-spacing: -1px; }
-  h1 .accent { color: var(--blue); }
+  h1 .accent {
+    background: linear-gradient(90deg, var(--blue), var(--violet), #22D3EE, var(--blue));
+    background-size: 300% 100%;
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    animation: gradientShift 6s ease infinite;
+  }
+  @keyframes gradientShift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
   .sub { max-width: 540px; margin: 18px auto 0; color: var(--muted); font-size: 15.5px; line-height: 1.65; }
   .contact-line { margin-top: 22px; display: inline-flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; color: var(--text); background: #fff; border: 1px solid var(--line); padding: 10px 18px; border-radius: 999px; }
   .contact-line a { color: var(--blue); text-decoration: none; }
@@ -58,29 +86,51 @@
   @keyframes barPulse { 0%,100% { opacity: 0.35; } 50% { opacity: 1; } }
 
   .section-head { display: flex; align-items: baseline; justify-content: space-between; margin: 60px 0 24px; }
-  .section-head h2 { font-family: 'Space Grotesk', sans-serif; font-size: 21px; font-weight: 600; }
+  .section-head h2 { font-family: 'Space Grotesk', sans-serif; font-size: 26px; font-weight: 700; letter-spacing: -0.5px; }
   .section-head .count { color: var(--muted); font-size: 13px; }
   .refresh-btn { background: none; border: none; color: var(--blue); font-size: 12.5px; font-weight: 600; cursor: pointer; }
 
   .deals { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 16px; }
   .empty-state { text-align: center; padding: 50px 20px; color: var(--muted); border: 1px dashed var(--line); border-radius: 16px; font-size: 14px; grid-column: 1/-1; }
 
-  /* ---------- highlight-on-hover deal card ---------- */
+  .skeleton-card { background: #fff; border: 1px solid var(--line); border-radius: 16px; padding: 22px; }
+  .sk-line { height: 14px; border-radius: 6px; margin-bottom: 12px; background: linear-gradient(90deg, #EDF1F8 25%, #F8FAFD 50%, #EDF1F8 75%); background-size: 200% 100%; animation: shimmer 1.4s ease-in-out infinite; }
+  .sk-line.w60 { width: 60%; height: 18px; } .sk-line.w40 { width: 40%; } .sk-line.h30 { height: 30px; margin-top: 4px; }
+  .sk-line.w80 { width: 80%; } .sk-line.w100 { width: 100%; height: 40px; margin-top: 14px; }
+  @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+  .card-outer { position: relative; border-radius: 18px; opacity: 0; transform: translateY(30px) scale(0.9); animation: cardIn 0.6s cubic-bezier(0.34,1.56,0.64,1) forwards; }
+  @keyframes cardIn { to { opacity: 1; transform: translateY(0) scale(1); } }
   .card {
-    position: relative; background: #fff; border: 1px solid var(--line); border-radius: 16px; padding: 22px;
-    opacity: 0; transform: translateY(16px); animation: cardIn 0.5s ease forwards; cursor: pointer;
-    transition: border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
-    overflow: hidden;
+    position: relative; z-index: 1; background: rgba(255,255,255,0.86); backdrop-filter: blur(14px);
+    border: 1px solid var(--line); border-radius: 17px; padding: 26px 22px 22px; cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.25s ease, border-color 0.25s ease; overflow: hidden;
+    transform-style: preserve-3d; will-change: transform;
   }
+  .card > .top-strip { position: absolute; top: 0; left: 0; right: 0; height: 6px; background: linear-gradient(90deg, var(--blue), var(--violet), #22D3EE); z-index: 2; }
   .card::after {
-    content: ""; position: absolute; inset: 0; border-radius: 16px; opacity: 0; pointer-events: none;
-    background: radial-gradient(circle at var(--mx,50%) var(--my,50%), rgba(11,95,255,0.14), transparent 60%);
+    content: ""; position: absolute; inset: 0; border-radius: 17px; opacity: 0; pointer-events: none;
+    background: radial-gradient(circle at var(--mx,50%) var(--my,50%), rgba(139,92,246,0.18), transparent 60%);
     transition: opacity 0.3s ease;
   }
-  .card:hover { border-color: #B9CFF7; transform: translateY(-5px); box-shadow: 0 14px 34px rgba(11,95,255,0.14); }
+  .card:hover { border-color: #B9CFF7; box-shadow: 0 20px 46px rgba(11,95,255,0.18); }
   .card:hover::after { opacity: 1; }
-  @keyframes cardIn { to { opacity: 1; transform: translateY(0); } }
-  .card.new::before { content: "NEW"; position: absolute; top: -9px; right: 18px; background: var(--red); color: #fff; font-size: 10.5px; font-weight: 700; letter-spacing: 1px; padding: 4px 10px; border-radius: 999px; box-shadow: 0 4px 14px rgba(226,55,89,0.35); z-index: 2; }
+  .card.new::before { content: "NEW"; position: absolute; top: -9px; right: 18px; background: var(--red); color: #fff; font-size: 10.5px; font-weight: 700; letter-spacing: 1px; padding: 4px 10px; border-radius: 999px; box-shadow: 0 4px 14px rgba(226,55,89,0.35); z-index: 2; animation: badgeBounce 1.6s ease-in-out infinite; }
+  @keyframes badgeBounce { 0%,100% { transform: translateY(0) rotate(-4deg); } 50% { transform: translateY(-3px) rotate(4deg); } }
+
+  .card-photo-wrap { position: relative; z-index: 1; margin-bottom: 12px; }
+  .card-photo-wrap img { width: 100%; height: 130px; object-fit: cover; border-radius: 10px; display: block; animation: photoFloat 3.4s ease-in-out infinite; }
+  @keyframes photoFloat { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+
+  .starburst {
+    position: absolute; top: 10px; right: 10px; z-index: 2; width: 62px; height: 62px;
+    background: conic-gradient(from 0deg, var(--red), #FF8A5C, var(--red), #FF8A5C, var(--red));
+    clip-path: polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);
+    display: flex; align-items: center; justify-content: center; text-align: center;
+    animation: starSpin 10s linear infinite; box-shadow: 0 6px 18px rgba(226,55,89,0.35);
+  }
+  .starburst span { animation: starSpin 10s linear infinite reverse; font-size: 10px; font-weight: 800; color: #fff; line-height: 1.1; }
+  @keyframes starSpin { to { transform: rotate(360deg); } }
 
   .phone-name { font-family: 'Space Grotesk', sans-serif; font-size: 17px; font-weight: 600; margin-bottom: 14px; position: relative; z-index: 1; }
   .price-row { display: flex; align-items: baseline; gap: 10px; margin-bottom: 4px; position: relative; z-index: 1; }
@@ -98,7 +148,13 @@
 
   /* ---------- overlays ---------- */
   .overlay { position: fixed; inset: 0; background: rgba(16,24,38,0.45); backdrop-filter: blur(3px); z-index: 50; display: flex; align-items: center; justify-content: center; padding: 20px; }
-  .modal { background: #fff; border-radius: 18px; padding: 28px; width: 420px; max-width: 100%; max-height: 86vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(16,24,38,0.25); }
+  .modal {
+    background: #fff; border-radius: 18px; padding: 28px 28px 24px; width: 420px; max-width: 100%;
+    max-height: 86vh; overflow-y: auto; box-shadow: 0 24px 70px rgba(16,24,38,0.3);
+    position: relative; overflow-x: hidden; animation: modalIn 0.28s cubic-bezier(0.16,1,0.3,1);
+  }
+  .modal::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, var(--blue), var(--violet), #22D3EE); }
+  @keyframes modalIn { from { opacity: 0; transform: scale(0.94) translateY(8px); } to { opacity: 1; transform: scale(1) translateY(0); } }
   .modal h3 { font-family: 'Space Grotesk', sans-serif; font-size: 18px; margin-bottom: 6px; }
   .modal .modal-sub { font-size: 12.5px; color: var(--muted); margin-bottom: 18px; line-height: 1.5; }
   .field { margin-bottom: 14px; }
@@ -106,7 +162,8 @@
   .field input, .field textarea { width: 100%; border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; font-size: 14px; font-family: inherit; color: var(--text); background: #FAFCFF; }
   .field textarea { resize: vertical; min-height: 60px; }
   .btn-row { display: flex; gap: 10px; margin-top: 18px; }
-  .btn { flex: 1; padding: 11px 16px; border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer; border: none; text-align: center; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
+  .btn { flex: 1; padding: 11px 16px; border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer; border: none; text-align: center; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 6px; transition: transform 0.12s ease; }
+  .btn:active { transform: scale(0.94); }
   .btn-primary { background: var(--blue); color: #fff; }
   .btn-whatsapp { background: #25D366; color: #fff; }
   .btn-ghost { background: #fff; color: var(--text); border: 1px solid var(--line); }
@@ -116,6 +173,48 @@
   .existing-list { margin-top: 20px; border-top: 1px solid var(--line); padding-top: 16px; }
   .existing-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; font-size: 13px; border-bottom: 1px solid #F0F4FA; }
   .existing-item .del { color: var(--red); font-size: 12px; cursor: pointer; font-weight: 600; }
+
+  /* ---------- manager panel: dropzone, live preview, discount hint, deals list ---------- */
+  .dropzone {
+    border: 2px dashed var(--line); border-radius: 12px; padding: 18px; text-align: center; cursor: pointer;
+    margin-bottom: 14px; transition: border-color 0.2s ease, background 0.2s ease; background: #FAFCFF;
+  }
+  .dropzone:hover, .dropzone.dragover { border-color: var(--blue); background: var(--blue-soft); }
+  .dz-icon { font-size: 22px; margin-bottom: 4px; }
+  .dz-text { font-size: 12.5px; color: var(--muted); font-weight: 500; }
+  .dropzone img { width: 100%; max-height: 120px; object-fit: cover; border-radius: 8px; display: block; }
+
+  .discount-hint { font-size: 12.5px; font-weight: 700; margin: -4px 0 14px; min-height: 18px; }
+  .discount-hint.good { color: var(--green); }
+  .discount-hint.bad { color: var(--red); }
+
+  .live-preview-card {
+    background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: 16px;
+    position: sticky; top: 0; min-height: 220px;
+  }
+  .preview-empty { color: var(--muted); font-size: 12.5px; text-align: center; padding: 60px 10px; }
+  .lp-img { width: 100%; height: 90px; object-fit: cover; border-radius: 8px; margin-bottom: 10px; }
+  .lp-name { font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 14px; margin-bottom: 8px; }
+  .lp-price { display: flex; align-items: baseline; gap: 8px; margin-bottom: 4px; }
+  .lp-price .n { font-size: 12px; color: var(--muted); text-decoration: line-through; }
+  .lp-price .c { font-family: 'Space Grotesk', sans-serif; font-size: 19px; font-weight: 700; color: var(--blue); }
+  .lp-label { font-size: 10px; color: var(--muted); text-transform: uppercase; margin-bottom: 8px; }
+  .lp-note { font-size: 11.5px; color: var(--muted); line-height: 1.5; }
+  .lp-badge { display: inline-block; background: var(--red); color: #fff; font-size: 9.5px; font-weight: 700; padding: 2px 8px; border-radius: 999px; margin-bottom: 8px; }
+
+  .deals-list-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+  .deals-list-header .title { font-size: 12px; font-weight: 700; color: var(--muted); letter-spacing: 0.4px; }
+  .deal-row { display: flex; align-items: center; gap: 12px; padding: 9px 8px; border-radius: 10px; transition: background 0.15s ease; }
+  .deal-row:hover { background: #F7FAFF; }
+  .deal-row .thumb { width: 38px; height: 38px; border-radius: 8px; object-fit: cover; background: var(--blue-soft); flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 15px; }
+  .deal-row .info { flex: 1; min-width: 0; }
+  .deal-row .info .n { font-size: 13px; font-weight: 600; color: var(--text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .deal-row .info .p { font-size: 11.5px; color: var(--muted); }
+  .deal-row .del-btn {
+    width: 28px; height: 28px; border-radius: 8px; border: 1px solid var(--line); background: #fff; color: var(--muted);
+    cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 13px; transition: all 0.15s ease; flex-shrink: 0;
+  }
+  .deal-row .del-btn:hover { background: var(--red); border-color: var(--red); color: #fff; transform: scale(1.08); }
 
   /* detail popup specifics */
   .detail-price { display: flex; align-items: baseline; gap: 12px; margin: 16px 0; }
@@ -130,8 +229,10 @@
 <body>
 
 <div class="grid-bg"></div>
+<canvas id="particles"></canvas>
 <div class="glow-orb one"></div>
 <div class="glow-orb two"></div>
+<div class="glow-orb three"></div>
 
 <div class="wrap">
   <nav>
@@ -143,13 +244,13 @@
   </nav>
 
   <section class="hero">
-    <div class="signal-stage">
-      <div class="ring r1"></div><div class="ring r2"></div><div class="ring r3"></div>
-      <div class="tower">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#0B5FFF" stroke-width="1.8" stroke-linecap="round">
-          <path d="M12 2 L12 22 M12 2 L8 6 M12 2 L16 6" /><path d="M5 10 a10 10 0 0 1 14 0" opacity="0.4" /><path d="M8 13 a5.5 5.5 0 0 1 8 0" opacity="0.75" />
-        </svg>
-      </div>
+    <div class="phone3d-stage">
+      <div class="orbit-ring o1"></div>
+      <div class="orbit-ring o2"></div>
+      <div class="phone3d"><div class="notch"></div><div class="screen"></div></div>
+      <span class="float-emoji e1">💙</span>
+      <span class="float-emoji e2">✨</span>
+      <span class="float-emoji e3">📶</span>
     </div>
     <div class="eyebrow">Tesco Mobile · Yeading team</div>
     <h1>Reach further with<br><span class="accent">Yeading Tesco Mobile</span></h1>
@@ -158,7 +259,7 @@
   </section>
 
   <div class="section-head">
-    <h2>Current phone deals</h2>
+    <h2>🔥 Current phone deals</h2>
     <div style="display:flex; align-items:center; gap:14px;"><span class="count" id="dealCount">— active</span><button class="refresh-btn" onclick="loadDeals()">↻ Refresh</button></div>
   </div>
 
@@ -186,16 +287,44 @@
 
 <!-- ===== manager panel ===== -->
 <div class="overlay" id="managerOverlay" style="display:none;">
-  <div class="modal">
-    <h3>Add a deal</h3>
+  <div class="modal" style="width:760px;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+      <h3>Add a deal</h3>
+      <div id="mgrStats" style="font-size:12px; color:var(--muted); font-weight:600;"></div>
+    </div>
     <div class="modal-sub">Saved as a real commit to the GitHub repo — everyone sees it within a minute.</div>
     <div id="formMsg"></div>
-    <div class="field"><label>Phone name</label><input type="text" id="f_phone" placeholder="e.g. iPhone 16 128GB" /></div>
-    <div class="field"><label>Phone photo (optional)</label><input type="file" id="f_photo" accept="image/*" onchange="previewPhoto(event)" /><img id="photoPreview" style="display:none;max-width:100%;border-radius:8px;margin-top:8px;" /></div>
-    <div class="field"><label>Normal price (£)</label><input type="text" id="f_normal" placeholder="e.g. 799" /></div>
-    <div class="field"><label>Colleague price (£)</label><input type="text" id="f_colleague" placeholder="e.g. 599" /></div>
-    <div class="field"><label>Note (optional)</label><textarea id="f_note" placeholder="Contract length, data allowance, expiry, etc."></textarea></div>
-    <div class="btn-row"><button class="btn btn-ghost" onclick="closeOverlay('managerOverlay')">Close</button><button class="btn btn-primary" onclick="addDeal()">Save deal</button></div>
+
+    <div style="display:grid; grid-template-columns: 1fr 220px; gap: 22px;">
+      <div>
+        <div class="field"><label>Phone name</label><input type="text" id="f_phone" placeholder="e.g. iPhone 16 128GB" oninput="updatePreview()" /></div>
+
+        <div class="dropzone" id="dropzone" onclick="document.getElementById('f_photo').click()">
+          <input type="file" id="f_photo" accept="image/*" onchange="previewPhoto(event)" style="display:none;" />
+          <div id="dzContent">
+            <div class="dz-icon">📷</div>
+            <div class="dz-text">Click or drag a phone photo here</div>
+          </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <div class="field"><label>Normal price (£)</label><input type="text" id="f_normal" placeholder="e.g. 799" oninput="updatePreview()" /></div>
+          <div class="field"><label>Colleague price (£)</label><input type="text" id="f_colleague" placeholder="e.g. 599" oninput="updatePreview()" /></div>
+        </div>
+        <div id="discountHint" class="discount-hint"></div>
+
+        <div class="field"><label>Note (optional)</label><textarea id="f_note" placeholder="Contract length, data allowance, expiry, etc." oninput="updatePreview()"></textarea></div>
+        <div class="btn-row"><button class="btn btn-ghost" onclick="closeOverlay('managerOverlay')">Close</button><button class="btn btn-primary" onclick="addDeal()">🚀 Save deal</button></div>
+      </div>
+
+      <div>
+        <div style="font-size:11px; font-weight:700; color:var(--muted); letter-spacing:0.5px; margin-bottom:8px;">LIVE PREVIEW</div>
+        <div id="livePreview" class="live-preview-card">
+          <div class="preview-empty">Start typing to see your deal card...</div>
+        </div>
+      </div>
+    </div>
+
     <div class="existing-list" id="existingList"></div>
   </div>
 </div>
@@ -224,10 +353,39 @@
     const reader = new FileReader();
     reader.onload = () => {
       pendingPhoto = reader.result; // data URL, stored directly in deals.json
-      const img = document.getElementById("photoPreview");
-      img.src = pendingPhoto; img.style.display = "block";
+      document.getElementById("dzContent").innerHTML = `<img src="${pendingPhoto}" alt="" /><div class="dz-text" style="margin-top:6px;">Click to change photo</div>`;
+      updatePreview();
     };
     reader.readAsDataURL(file);
+  }
+
+  function updatePreview() {
+    const phone = document.getElementById("f_phone").value.trim();
+    const normal = parseFloat(document.getElementById("f_normal").value) || 0;
+    const colleague = parseFloat(document.getElementById("f_colleague").value) || 0;
+    const note = document.getElementById("f_note").value.trim();
+    const box = document.getElementById("livePreview");
+    const hint = document.getElementById("discountHint");
+
+    if (normal > 0 && colleague > 0) {
+      const pct = Math.round((1 - colleague / normal) * 100);
+      if (colleague >= normal) { hint.className = "discount-hint bad"; hint.textContent = "⚠ Colleague price should be lower than normal price"; }
+      else { hint.className = "discount-hint good"; hint.textContent = `✓ Colleagues save ${pct}% (£${(normal - colleague).toFixed(2)})`; }
+    } else { hint.textContent = ""; }
+
+    if (!phone && !normal && !colleague && !note && !pendingPhoto) {
+      box.innerHTML = `<div class="preview-empty">Start typing to see your deal card...</div>`;
+      return;
+    }
+    const pct = (normal > 0 && colleague > 0 && colleague < normal) ? Math.round((1 - colleague / normal) * 100) : null;
+    box.innerHTML = `
+      ${pct ? `<span class="lp-badge">NEW</span>` : ""}
+      ${pendingPhoto ? `<img class="lp-img" src="${pendingPhoto}" alt="" />` : ""}
+      <div class="lp-name">${phone ? esc(phone) : "Phone name..."}</div>
+      <div class="lp-price"><span class="n">£${normal || "0"}</span><span class="c">£${colleague || "0"}</span></div>
+      <div class="lp-label">Colleague price</div>
+      ${note ? `<div class="lp-note">${esc(note)}</div>` : ""}
+    `;
   }
 
   function esc(s) { return (s || "").toString().replace(/[&<>"']/g, (c) => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c])); }
@@ -241,6 +399,7 @@
 
   async function loadDeals() {
     const grid = document.getElementById("dealsGrid");
+    grid.innerHTML = Array.from({ length: 3 }).map(() => `<div class="skeleton-card"><div class="sk-line w60"></div><div class="sk-line w40 h30"></div><div class="sk-line w80"></div><div class="sk-line w100"></div></div>`).join("");
     try {
       const res = await fetch(`${RAW_URL}?t=${Date.now()}`, { cache: "no-store" });
       if (!res.ok) throw new Error("not found");
@@ -259,23 +418,80 @@
     const sorted = [...currentDeals].sort((a,b) => (b.addedAt||0) - (a.addedAt||0));
     grid.innerHTML = sorted.map((d, i) => {
       const isNew = (Date.now() - (d.addedAt || 0)) < 1000 * 60 * 60 * 24 * 3;
+      const pct = (d.normalPrice && d.colleaguePrice) ? Math.round((1 - (d.colleaguePrice / d.normalPrice)) * 100) : null;
       return `
-        <div class="card ${isNew ? "new" : ""}" style="animation-delay:${i * 0.06}s" data-id="${esc(d.id)}"
-             onmousemove="cardGlow(event,this)" onclick="openDetail('${esc(d.id)}')">
+        <div class="card-outer" style="animation-delay:${i * 0.06}s">
+        <div class="card ${isNew ? "new" : ""}" data-id="${esc(d.id)}"
+             onmousemove="cardTilt(event,this)" onmouseleave="cardTiltReset(this)" onclick="openDetail('${esc(d.id)}')">
+          <div class="top-strip"></div>
+          ${pct ? `<div class="starburst"><span>${pct}%<br>OFF</span></div>` : ""}
           <div class="phone-name">${esc(d.phone)}</div>
-          ${d.photo ? `<img src="${d.photo}" alt="" style="width:100%;height:130px;object-fit:cover;border-radius:10px;margin-bottom:12px;position:relative;z-index:1;" />` : ""}
+          ${d.photo ? `<div class="card-photo-wrap"><img src="${d.photo}" alt="" /></div>` : ""}
           <div class="price-row"><span class="price-normal">£${esc(d.normalPrice)}</span><span class="price-colleague">£${esc(d.colleaguePrice)}</span></div>
           <div class="price-label">Colleague price</div>
           ${d.note ? `<div class="card-note">${esc(d.note)}</div>` : ""}
           <div class="card-foot"><span>Posted ${new Date(d.addedAt || Date.now()).toLocaleDateString()}</span><span class="tap-hint">Tap for details →</span></div>
+        </div>
         </div>`;
     }).join("");
   }
 
-  function cardGlow(e, el) {
+  function cardTilt(e, el) {
     const r = el.getBoundingClientRect();
-    el.style.setProperty("--mx", `${e.clientX - r.left}px`);
-    el.style.setProperty("--my", `${e.clientY - r.top}px`);
+    const mx = e.clientX - r.left, my = e.clientY - r.top;
+    el.style.setProperty("--mx", `${mx}px`);
+    el.style.setProperty("--my", `${my}px`);
+    const rx = ((my / r.height) - 0.5) * -10;
+    const ry = ((mx / r.width) - 0.5) * 10;
+    el.style.transform = `perspective(700px) rotateX(${rx}deg) rotateY(${ry}deg) translateY(-4px)`;
+  }
+  function cardTiltReset(el) { el.style.transform = "perspective(700px) rotateX(0) rotateY(0) translateY(0)"; }
+
+  function fireConfetti() {
+    const colors = ["#0B5FFF", "#8B5CF6", "#22D3EE", "#E23759", "#FFB020"];
+    const durationMs = 25000; // ~25 seconds of confetti
+    const startTime = Date.now();
+
+    function burstOnce() {
+      for (let i = 0; i < 10; i++) {
+        const el = document.createElement("div");
+        const size = Math.random() * 7 + 5;
+        el.style.cssText = `position:fixed; z-index:60; top:38%; left:50%; width:${size}px; height:${size}px;
+          background:${colors[i % colors.length]}; border-radius:${Math.random() > 0.5 ? "50%" : "2px"}; pointer-events:none;`;
+        document.body.appendChild(el);
+        const angle = Math.random() * Math.PI * 2;
+        const dist = Math.random() * 220 + 100;
+        const dx = Math.cos(angle) * dist, dy = Math.sin(angle) * dist - 60;
+        el.animate(
+          [
+            { transform: "translate(-50%,-50%) rotate(0deg)", opacity: 1 },
+            { transform: `translate(${dx}px, ${dy}px) rotate(${Math.random() * 500}deg)`, opacity: 0 },
+          ],
+          { duration: 1100 + Math.random() * 700, easing: "cubic-bezier(0.16,1,0.3,1)" }
+        ).onfinish = () => el.remove();
+      }
+    }
+
+    burstOnce();
+    const interval = setInterval(() => {
+      if (Date.now() - startTime > durationMs || !document.getElementById("detailOverlay") || document.getElementById("detailOverlay").style.display === "none") {
+        clearInterval(interval);
+        return;
+      }
+      burstOnce();
+    }, 350);
+  }
+
+  function animatePriceCountdown(el, from, to, duration) {
+    const start = performance.now();
+    function step(now) {
+      const t = Math.min((now - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - t, 3);
+      const val = Math.round(from - (from - to) * eased);
+      el.textContent = `£${val}`;
+      if (t < 1) requestAnimationFrame(step); else el.textContent = `£${to}`;
+    }
+    requestAnimationFrame(step);
   }
 
   function openDetail(id) {
@@ -286,7 +502,7 @@
       <h3>${esc(d.phone)}</h3>
       <div class="modal-sub">Yeading colleague exclusive${savingPct ? ` · save ${savingPct}%` : ""}</div>
       ${d.photo ? `<img src="${d.photo}" alt="" style="width:100%;max-height:220px;object-fit:cover;border-radius:10px;margin-top:6px;" />` : ""}
-      <div class="detail-price"><span class="n">£${esc(d.normalPrice)}</span><span class="c">£${esc(d.colleaguePrice)}</span></div>
+      <div class="detail-price"><span class="n">£${esc(d.normalPrice)}</span><span class="c" id="revealPrice">£${esc(d.normalPrice)}</span></div>
       <div class="detail-row"><span>Normal price</span><b>£${esc(d.normalPrice)}</b></div>
       <div class="detail-row"><span>Colleague price</span><b>£${esc(d.colleaguePrice)}</b></div>
       <div class="detail-row"><span>Posted</span><b>${new Date(d.addedAt || Date.now()).toLocaleDateString()}</b></div>
@@ -296,6 +512,11 @@
         <a class="btn btn-whatsapp" href="${toWhatsAppLink('07456610065', `Hi, I'm interested in the ${d.phone} colleague deal (£${d.colleaguePrice}) on the Yeading board.`)}" target="_blank">Reach on WhatsApp</a>
       </div>`;
     document.getElementById("detailOverlay").style.display = "flex";
+    setTimeout(() => {
+      fireConfetti();
+      const priceEl = document.getElementById("revealPrice");
+      if (priceEl) animatePriceCountdown(priceEl, Number(d.normalPrice) || 0, Number(d.colleaguePrice) || 0, 900);
+    }, 120);
   }
 
   function openManager() {
@@ -325,14 +546,50 @@
     renderExistingList();
     document.getElementById("f_phone").value = ""; document.getElementById("f_normal").value = "";
     document.getElementById("f_colleague").value = ""; document.getElementById("f_note").value = "";
+    document.getElementById("dzContent").innerHTML = `<div class="dz-icon">📷</div><div class="dz-text">Click or drag a phone photo here</div>`;
     document.getElementById("formMsg").innerHTML = "";
+    document.getElementById("discountHint").textContent = "";
+    pendingPhoto = null;
+    updatePreview();
+    setupDropzone();
+  }
+
+  function setupDropzone() {
+    const dz = document.getElementById("dropzone");
+    if (dz.dataset.wired) return;
+    dz.dataset.wired = "1";
+    dz.addEventListener("dragover", (e) => { e.preventDefault(); dz.classList.add("dragover"); });
+    dz.addEventListener("dragleave", () => dz.classList.remove("dragover"));
+    dz.addEventListener("drop", (e) => {
+      e.preventDefault(); dz.classList.remove("dragover");
+      const file = e.dataTransfer.files[0];
+      if (file) { document.getElementById("f_photo").files = e.dataTransfer.files; previewPhoto({ target: { files: [file] } }); }
+    });
   }
 
   function renderExistingList() {
     const list = document.getElementById("existingList");
-    if (currentDeals.length === 0) { list.innerHTML = ""; return; }
-    list.innerHTML = `<div style="font-size:12px;font-weight:600;color:var(--muted);margin-bottom:8px;">CURRENT DEALS</div>` +
-      currentDeals.map((d) => `<div class="existing-item"><span>${esc(d.phone)} — £${esc(d.colleaguePrice)}</span><span class="del" onclick="removeDeal('${esc(d.id)}')">Remove</span></div>`).join("");
+    const stats = document.getElementById("mgrStats");
+    if (currentDeals.length === 0) {
+      list.innerHTML = "";
+      if (stats) stats.textContent = "";
+      return;
+    }
+    const avgPct = Math.round(
+      currentDeals.reduce((sum, d) => {
+        const n = parseFloat(d.normalPrice), c = parseFloat(d.colleaguePrice);
+        return sum + (n > 0 ? (1 - c / n) * 100 : 0);
+      }, 0) / currentDeals.length
+    );
+    if (stats) stats.textContent = `${currentDeals.length} deals · avg ${avgPct}% off`;
+
+    list.innerHTML = `<div class="deals-list-header"><span class="title">CURRENT DEALS</span></div>` +
+      currentDeals.map((d) => `
+        <div class="deal-row">
+          <div class="thumb">${d.photo ? `<img src="${d.photo}" style="width:100%;height:100%;object-fit:cover;border-radius:8px;" />` : "📱"}</div>
+          <div class="info"><div class="n">${esc(d.phone)}</div><div class="p">£${esc(d.colleaguePrice)} colleague price</div></div>
+          <button class="del-btn" onclick="removeDeal('${esc(d.id)}')" title="Remove">✕</button>
+        </div>`).join("");
   }
 
   // ---- GitHub Contents API: read sha, then commit updated deals.json ----
@@ -365,7 +622,9 @@
       currentDeals = updated;
       msg.innerHTML = `<div class="msg ok">Committed to GitHub — live on the board now.</div>`;
       document.getElementById("f_phone").value = ""; document.getElementById("f_normal").value = ""; document.getElementById("f_colleague").value = ""; document.getElementById("f_note").value = "";
-      document.getElementById("f_photo").value = ""; document.getElementById("photoPreview").style.display = "none"; pendingPhoto = null;
+      document.getElementById("dzContent").innerHTML = `<div class="dz-icon">📷</div><div class="dz-text">Click or drag a phone photo here</div>`;
+      pendingPhoto = null;
+      updatePreview();
       renderDeals(); renderExistingList();
     } catch (e) { msg.innerHTML = `<div class="msg err">${esc(e.message)}</div>`; }
   }
@@ -384,6 +643,38 @@
 
   loadDeals();
   setInterval(loadDeals, 60000);
+
+  // ---- gentle floating sparkle particles (purely decorative) ----
+  (function initParticles() {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const canvas = document.getElementById("particles");
+    const ctx = canvas.getContext("2d");
+    let w, h, particles;
+    function resize() {
+      w = canvas.width = window.innerWidth;
+      h = canvas.height = Math.min(window.innerHeight, 700);
+      particles = Array.from({ length: 55 }).map(() => ({
+        x: Math.random() * w, y: Math.random() * h, r: Math.random() * 2.6 + 1,
+        speed: Math.random() * 0.3 + 0.08, drift: (Math.random() - 0.5) * 0.25,
+        alpha: Math.random() * 0.55 + 0.25, hue: Math.random() > 0.5 ? "11,95,255" : "139,92,246",
+      }));
+    }
+    function tick() {
+      ctx.clearRect(0, 0, w, h);
+      particles.forEach((p) => {
+        p.y -= p.speed; p.x += p.drift;
+        if (p.y < -10) { p.y = h + 10; p.x = Math.random() * w; }
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(${p.hue},${p.alpha})`;
+        ctx.fill();
+      });
+      requestAnimationFrame(tick);
+    }
+    resize();
+    window.addEventListener("resize", resize);
+    tick();
+  })();
 </script>
 
 </body>
