@@ -314,7 +314,7 @@
         <div id="discountHint" class="discount-hint"></div>
 
         <div class="field"><label>Note (optional)</label><textarea id="f_note" placeholder="Contract length, data allowance, expiry, etc." oninput="updatePreview()"></textarea></div>
-        <div class="btn-row"><button class="btn btn-ghost" onclick="closeOverlay('managerOverlay')">Close</button><button class="btn btn-primary" onclick="addDeal()">🚀 Save deal</button></div>
+        <div class="btn-row"><button class="btn btn-ghost" onclick="closeOverlay('managerOverlay')">Close</button><button class="btn btn-primary" id="saveDealBtn" onclick="addDeal()">🚀 Save deal</button></div>
       </div>
 
       <div>
@@ -592,9 +592,10 @@
         </div>`).join("");
   }
 
-  // ---- GitHub Contents API: read sha, then commit updated deals.json ----
-  async function saveDealsToGitHub(deals) {
-    const getRes = await fetch(API_URL, { headers: { Authorization: `Bearer ${ghToken}` } });
+  // ---- GitHub Contents API: read sha, then commit updated deals.json (auto-retries on conflict) ----
+  async function saveDealsToGitHub(deals, attempt) {
+    attempt = attempt || 1;
+    const getRes = await fetch(`${API_URL}?t=${Date.now()}`, { headers: { Authorization: `Bearer ${ghToken}` }, cache: "no-store" });
     if (!getRes.ok) throw new Error("Couldn't read current file");
     const getData = await getRes.json();
     const sha = getData.sha;
@@ -604,10 +605,17 @@
       headers: { Authorization: `Bearer ${ghToken}`, "Content-Type": "application/json" },
       body: JSON.stringify({ message: `Update deals (${deals.length} active)`, content: newContent, sha, branch: GH_BRANCH }),
     });
+    if (putRes.status === 409 && attempt < 4) {
+      // Someone else's commit (or our own previous save) landed first — refetch the latest sha and retry.
+      await new Promise((r) => setTimeout(r, 500 * attempt));
+      return saveDealsToGitHub(deals, attempt + 1);
+    }
     if (!putRes.ok) { const err = await putRes.json().catch(() => ({})); throw new Error(err.message || "GitHub rejected the commit"); }
   }
 
   async function addDeal() {
+    const btn = document.getElementById("saveDealBtn");
+    if (btn.disabled) return; // already saving, ignore extra clicks
     const phone = document.getElementById("f_phone").value.trim();
     const normal = document.getElementById("f_normal").value.trim();
     const colleague = document.getElementById("f_colleague").value.trim();
@@ -616,6 +624,7 @@
     if (!phone || !normal || !colleague) { msg.innerHTML = `<div class="msg err">Fill in phone name, normal price and colleague price.</div>`; return; }
     const newDeal = { id: Date.now().toString(36) + Math.random().toString(36).slice(2,6), phone, normalPrice: normal, colleaguePrice: colleague, note, photo: pendingPhoto, addedAt: Date.now() };
     const updated = [newDeal, ...currentDeals];
+    btn.disabled = true; btn.textContent = "Saving...";
     msg.innerHTML = `<div class="msg">Saving to GitHub...</div>`;
     try {
       await saveDealsToGitHub(updated);
@@ -627,6 +636,7 @@
       updatePreview();
       renderDeals(); renderExistingList();
     } catch (e) { msg.innerHTML = `<div class="msg err">${esc(e.message)}</div>`; }
+    btn.disabled = false; btn.textContent = "🚀 Save deal";
   }
 
   async function removeDeal(id) {
