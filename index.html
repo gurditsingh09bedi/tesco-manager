@@ -118,8 +118,8 @@
   .card.new::before { content: "NEW"; position: absolute; top: -9px; right: 18px; background: var(--red); color: #fff; font-size: 10.5px; font-weight: 700; letter-spacing: 1px; padding: 4px 10px; border-radius: 999px; box-shadow: 0 4px 14px rgba(226,55,89,0.35); z-index: 2; animation: badgeBounce 1.6s ease-in-out infinite; }
   @keyframes badgeBounce { 0%,100% { transform: translateY(0) rotate(-4deg); } 50% { transform: translateY(-3px) rotate(4deg); } }
 
-  .card-photo-wrap { position: relative; z-index: 1; margin-bottom: 12px; }
-  .card-photo-wrap img { width: 100%; height: 130px; object-fit: cover; border-radius: 10px; display: block; animation: photoFloat 3.4s ease-in-out infinite; }
+  .card-photo-wrap { position: relative; z-index: 1; margin-bottom: 12px; background: var(--panel-2); border-radius: 10px; overflow: hidden; }
+  .card-photo-wrap img { width: 100%; height: 180px; object-fit: contain; object-position: center; display: block; animation: photoFloat 3.4s ease-in-out infinite; }
   @keyframes photoFloat { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
 
   .starburst {
@@ -193,7 +193,7 @@
     position: sticky; top: 0; min-height: 220px;
   }
   .preview-empty { color: var(--muted); font-size: 12.5px; text-align: center; padding: 60px 10px; }
-  .lp-img { width: 100%; height: 90px; object-fit: cover; border-radius: 8px; margin-bottom: 10px; }
+  .lp-img { width: 100%; height: 130px; object-fit: contain; background: var(--panel-2); border-radius: 8px; margin-bottom: 10px; }
   .lp-name { font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 14px; margin-bottom: 8px; }
   .lp-price { display: flex; align-items: baseline; gap: 8px; margin-bottom: 4px; }
   .lp-price .n { font-size: 12px; color: var(--muted); text-decoration: line-through; }
@@ -511,7 +511,7 @@
     document.getElementById("detailModal").innerHTML = `
       <h3>${esc(d.phone)}</h3>
       <div class="modal-sub">Yeading colleague exclusive${savingPct ? ` · save ${savingPct}%` : ""}</div>
-      ${d.photo ? `<img src="${d.photo}" alt="" style="width:100%;max-height:220px;object-fit:cover;border-radius:10px;margin-top:6px;" />` : ""}
+      ${d.photo ? `<img src="${d.photo}" alt="" style="width:100%;max-height:260px;object-fit:contain;background:var(--panel-2);border-radius:10px;margin-top:6px;" />` : ""}
       <div class="detail-price"><span class="n">£${esc(d.normalPrice)}</span><span class="c" id="revealPrice">£${esc(d.normalPrice)}</span></div>
       <div class="detail-row"><span>Normal price</span><b>£${esc(d.normalPrice)}</b></div>
       <div class="detail-row"><span>Colleague price</span><b>£${esc(d.colleaguePrice)}</b></div>
