@@ -339,7 +339,9 @@
   const GH_BRANCH = "main";
   const DATA_PATH = "deals.json";
 
-  const RAW_URL = `https://raw.githubusercontent.com/${GH_OWNER}/${GH_REPO}/${GH_BRANCH}/${DATA_PATH}`;
+  const RAW_URL = `https://cdn.jsdelivr.net/gh/${GH_OWNER}/${GH_REPO}@${GH_BRANCH}/${DATA_PATH}`;
+  const RAW_URL_FALLBACK = `https://raw.githubusercontent.com/${GH_OWNER}/${GH_REPO}/${GH_BRANCH}/${DATA_PATH}`;
+  const PURGE_URL = `https://purge.jsdelivr.net/gh/${GH_OWNER}/${GH_REPO}@${GH_BRANCH}/${DATA_PATH}`;
   const API_URL = `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${DATA_PATH}`;
 
   let currentDeals = [];
@@ -401,9 +403,17 @@
     const grid = document.getElementById("dealsGrid");
     grid.innerHTML = Array.from({ length: 3 }).map(() => `<div class="skeleton-card"><div class="sk-line w60"></div><div class="sk-line w40 h30"></div><div class="sk-line w80"></div><div class="sk-line w100"></div></div>`).join("");
     try {
-      const res = await fetch(`${RAW_URL}?t=${Date.now()}`, { cache: "no-store" });
-      if (!res.ok) throw new Error("not found");
-      const data = await res.json();
+      let data = null;
+      try {
+        const res = await fetch(`${RAW_URL}?t=${Date.now()}`, { cache: "no-store" });
+        if (res.ok) data = await res.json();
+      } catch (e) { /* jsDelivr unreachable — fall through to GitHub direct */ }
+
+      if (!data) {
+        const res2 = await fetch(`${RAW_URL_FALLBACK}?t=${Date.now()}`, { cache: "no-store" });
+        if (!res2.ok) throw new Error("not found");
+        data = await res2.json();
+      }
       currentDeals = data.deals || [];
       renderDeals();
     } catch (e) {
@@ -611,6 +621,7 @@
       return saveDealsToGitHub(deals, attempt + 1);
     }
     if (!putRes.ok) { const err = await putRes.json().catch(() => ({})); throw new Error(err.message || "GitHub rejected the commit"); }
+    fetch(PURGE_URL).catch(() => {}); // best-effort — refresh the CDN cache, ignore failures
   }
 
   async function addDeal() {
